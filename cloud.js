@@ -45,6 +45,7 @@ PhaserGame.prototype = {
         this.load.spritesheet('dude', 'assets/dude.png', 32, 48);
 
         //  Note: Graphics are Copyright 2015 Photon Storm Ltd.
+        this.load.audio('burp', 'assets/burp.m4a');
 
     },
 
@@ -60,6 +61,10 @@ PhaserGame.prototype = {
         this.diamond.create(2460, 30, 'diamond');
         this.diamond.setAll('body.allowGravity', false);
         this.diamond.setAll('body.immovable', true);
+        emitter = game.add.emitter(2460, 30, 500);
+
+        emitter.makeParticles('diamond');
+        emitter.gravity = 200;
 
         //  Platforms that don't move
         this.stationary = this.add.physicsGroup();
@@ -75,7 +80,9 @@ PhaserGame.prototype = {
 
         this.stationary.setAll('body.allowGravity', false);
         this.stationary.setAll('body.immovable', true);
-
+        this.stationary.setAll('body.friction.x', 30);
+        console.log(this.stationary);
+        
         //  Platforms that move
         this.clouds = this.add.physicsGroup();
 
@@ -103,7 +110,7 @@ PhaserGame.prototype = {
         ]);
 
         //  The Player
-        this.player = this.add.sprite(2410, 0, 'dude');
+        this.player = this.add.sprite(24100, 0, 'dude');
 
         this.physics.arcade.enable(this.player);
 
@@ -119,7 +126,8 @@ PhaserGame.prototype = {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         this.clouds.callAll('start');
-
+        fx = this.add.audio('burp');
+        console.log(this.player.body);
     },
 
     customSep: function (player, platform) {
@@ -267,8 +275,20 @@ PhaserGame.prototype = {
         }
       function hitDiamond (player, diamond) {
         // Removes the player from the screen
-        console.log("kill");
+        
         diamond.kill();
+        // fx.play();
+        // player.body.position.x=20;
+        // player.body.position.y=0;  
+        // player.body.bounce.y=1;
+        player.body.angle=320;
+
+
+        emitter.start(true, 2000, null, 10);
+        var text = "Congrats!!!\n you found the pizza";
+        var style = { font: "45px Arial", fill: "#ff0044", align: "center" };
+        var t = game.add.text(this.world.worldPosition, 100, text, style);
+
       }
     }
 
