@@ -239,6 +239,7 @@ PhaserGame.prototype = {
         if (this.player.body.onFloor()){
           goal.play();
           this.player.kill();
+          this.player.reset(50,0);
         }
 
         if (this.cursors.left.isDown)
@@ -317,7 +318,6 @@ PhaserGame.prototype = {
         var t = game.add.text(1950,0, text, style);
         // game.state.start('Game', PhaserGame, true); 
         //player.reset(50,0);
-        game.time.events.add(2000, player.kill(), this);
         
       }
     },
