@@ -122,7 +122,7 @@ PhaserGame.prototype = {
         ]);
 
         //  The Player
-        this.player = this.add.sprite(50, 0, 'egg');
+        this.player = this.add.sprite(60, 0, 'egg');
 
         this.physics.arcade.enable(this.player);
 
@@ -305,25 +305,31 @@ PhaserGame.prototype = {
         //   this.player.kill();
         // }
       function hitpizza (player, pizza) {
-        // Removes the player from the screen
-        
+        // Removes the pizza from the screen
+
         pizza.kill();
         goal.play();
-        fx.play();
-        // player.body.position.x=20;
-        // player.body.position.y=0;  
-        player.body.bounce.y=1;
-        player.body.angle=320;
+        player.body.velocity = 0;
+        cursors = game.input.keyboard.disable = true;
 
+        game.time.events.add(200, function(){
+          fx.play();
+          // player.body.bounce.y=1;
+          // player.body.angle=320;
+        })
 
-        emitter.start(true, 2000, null, 10);
-        var text = "Congrats!!!\n you found the pizza";
-        var style = { font: "45px Arial", fill: "#ff0044", align: "center" };
-        var t = game.add.text(1950,0, text, style);
-        // game.state.start('Game', PhaserGame, true); 
-        //player.reset(50,0);
-        
-      }
+        game.time.events.add(300, function(){
+          emitter.start(true, 2000, null, 10);
+          game.time.events.add(700, function(){
+            var text = "Congrats!!!\n you found the pizza";
+            var style = { font: "45px Arial", fill: "#ff0044", align: "center" };
+            var t = game.add.text(1950,0, text, style);
+          })
+        })
+        game.time.events.add(5000, function(){
+          game.state.start('Game', PhaserGame, true);
+        })
+      }  
     },
 
 
@@ -337,10 +343,6 @@ function deadGuy(player,timeStamp){
   })
           
 
-}
-function timeCheck(){
-  var timeStamp = game.time.now;
- 
 }
 
 function removeText() {
