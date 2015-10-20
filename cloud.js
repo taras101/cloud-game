@@ -52,10 +52,11 @@ PhaserGame.prototype = {
         this.load.audio('death', 'assets/death.wav');
         this.load.audio('move', 'assets/move.wav');
 
+
     },
 
     create: function () {
-
+    var timeStamp;
     text = game.add.text(game.world.centerX, game.world.centerY, "- phaser -\nclick to remove", { font: "65px Arial", fill: "#ff0044", align: "center" });
     text.anchor.setTo(0.5, 0.5);
 
@@ -236,18 +237,17 @@ PhaserGame.prototype = {
         this.physics.arcade.overlap(this.player, this.pizza, hitpizza, null, this);
         //  Do this AFTER the collide check, or we won't have blocked/touching set
         var standing = this.player.body.blocked.down || this.player.body.touching.down || this.locked;
-
+       
         this.player.body.velocity.x = 0;
         if (this.player.body.onFloor()){
-          death.play();
-          this.player.kill();
-          this.player.reset(50,0);
+          var timeStamp = game.time.now;
+          deadGuy(this.player,timeStamp);
         }
 
         if (this.cursors.left.isDown)
         {
             this.player.body.velocity.x = -220;
-            move.play('',0,0.5,false,false);
+            move.play('',0,0.4,false,false);
 
             if (this.facing !== 'left')
             {
@@ -258,7 +258,7 @@ PhaserGame.prototype = {
         else if (this.cursors.right.isDown)
         {
             this.player.body.velocity.x = 220;
-            move.play('',0,0.5,false,false);
+            move.play('',0,0.4,false,false);
 
             if (this.facing !== 'right')
             {
@@ -329,11 +329,26 @@ PhaserGame.prototype = {
 
 
 };
+function deadGuy(player,timeStamp){
+  death.play('',0,0.5,false,false);
+  player.kill();       
+  game.time.events.add(700, function(){
+    player.reset(50,0);
+  })
+          
+
+}
+function timeCheck(){
+  var timeStamp = game.time.now;
+ 
+}
+
 function removeText() {
 
     text.destroy();
 
 }
+
 CloudPlatform = function (game, x, y, key, group) {
 
     if (typeof group === 'undefined') { group = game.world; }
