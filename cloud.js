@@ -50,6 +50,7 @@ PhaserGame.prototype = {
         this.load.audio('jump', 'assets/jump.wav');
         this.load.audio('goal', 'assets/goal.wav');
         this.load.audio('death', 'assets/death.wav');
+        this.load.audio('move', 'assets/move.wav');
 
     },
 
@@ -120,7 +121,7 @@ PhaserGame.prototype = {
         ]);
 
         //  The Player
-        this.player = this.add.sprite(2390, 0, 'egg');
+        this.player = this.add.sprite(50, 0, 'egg');
 
         this.physics.arcade.enable(this.player);
 
@@ -140,6 +141,7 @@ PhaserGame.prototype = {
         death = this.add.audio('death');
         jump = this.add.audio('jump');
         goal = this.add.audio('goal');
+        move = this.add.audio('move');
         console.log(this.player.body);
         text = this.add.text(10,10, "Find the slice of pizza", { font: "35px Arial", fill: "#ff0044", align: "center" });
         
@@ -237,7 +239,7 @@ PhaserGame.prototype = {
 
         this.player.body.velocity.x = 0;
         if (this.player.body.onFloor()){
-          goal.play();
+          death.play();
           this.player.kill();
           this.player.reset(50,0);
         }
@@ -245,6 +247,7 @@ PhaserGame.prototype = {
         if (this.cursors.left.isDown)
         {
             this.player.body.velocity.x = -220;
+            move.play('',0,0.5,false,false);
 
             if (this.facing !== 'left')
             {
@@ -255,6 +258,7 @@ PhaserGame.prototype = {
         else if (this.cursors.right.isDown)
         {
             this.player.body.velocity.x = 220;
+            move.play('',0,0.5,false,false);
 
             if (this.facing !== 'right')
             {
@@ -289,7 +293,7 @@ PhaserGame.prototype = {
             }
 
             this.willJump = true;
-            jump.play();
+            jump.play('',0,0.5,false,false);
         }
 
         if (this.locked)
